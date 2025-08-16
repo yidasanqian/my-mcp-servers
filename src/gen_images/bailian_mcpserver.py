@@ -56,7 +56,13 @@ def generate_image(
     Args:
         prompt: 正向提示词，用来描述生成图像中期望包含的元素和视觉特点
         ctx: MCP上下文对象
-        size: 输出图像的分辨率，格式为宽*高。默认为1328*1328
+        size: 输出图像的分辨率，格式为宽*高。：
+            默认为1328*1328,可选的分辨率及其对应的图像宽高比例为:
+            - "1664*928": approximately 16:9
+            - "1472*1140": approximately 4:3
+            - "1328*1328": 1:1 (square)
+            - "1140*1472": approximately 3:4
+            - "928*1664": approximately 9:16
         n: 生成图片的数量。当前仅支持生成1张图像
         prompt_extend: 是否开启prompt智能改写
         watermark: 是否添加水印标识
