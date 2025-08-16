@@ -11,23 +11,43 @@ Model Context Protocol Servers
 提供与PostgreSQL数据库交互的工具和资源。
 
 ### 2. 阿里云百炼生图API MCP服务器
+#### Cherry Studio
+前提条件：已安装 Cherry Studio
 ```json
 {
   "mcpServers": {
     "TextToImage": {
-      "name": "通义qwen-文生图",
+      "name": "文生图",
       "type": "streamableHttp",
       "description": "基于阿里云百炼文生图模型封装的 MCP服务器",
       "isActive": true,
       "baseUrl": "http://localhost:8000/mcp",
       "headers": {
-        "Authorization": "Bearer ${BAILIAN_API_KEY}"
+        "Authorization": "Bearer ${DASHSCOPE_API_KEY}"
       }
     }
   }
 }
 ```
-
+#### cursor/kilo/roocode/cline
+```
+{
+  "mcpServers": {
+    "TextToImage-文生图": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:8000/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer ${DASHSCOPE_API_KEY}"
+      }
+    }
+  }
+}
+```
 ## 开发说明
 
 ### 环境配置
