@@ -44,14 +44,14 @@ Model Context Protocol Servers
 docker-compose up -d
 ```
 
-1. 团队成员配置：
+1. cherry studio配置：
 
 ```json
 {
   "mcpServers": {
     "bailian-image-gen": {
       "type": "streamableHttp",
-      "baseUrl": "https://your-server.com:8000/mcp",
+      "baseUrl": "http://localhost:8000/mcp",
       "headers": {
         "Authorization": "Bearer ${DASHSCOPE_API_KEY}"
       }
