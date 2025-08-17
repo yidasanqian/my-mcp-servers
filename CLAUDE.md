@@ -16,12 +16,20 @@ This repository contains Model Context Protocol (MCP) servers, specifically a Po
 
 ## Common Development Tasks
 
+### 运行uv命令前需要激活虚拟环境
+
+```bash
+source .venv/bin/activate
+```
+
 ### debug the Server
+
 ```bash
 uv run mcp dev mcpserver.py
 ```
 
 ### Dependencies
+
 - Python >= 3.11
 - mcp[cli]>=1.12.0
 - psycopg2-binary>=2.9.10
