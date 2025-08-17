@@ -5,27 +5,42 @@
 """
 
 import json
+import os
 import time
 from typing import Optional
 import httpx
 from mcp.server.fastmcp import FastMCP, Context
 from starlette.datastructures import Headers
 
-# 创建MCP服务器实例
-mcp = FastMCP("阿里云百炼生图API MCP服务器")
 
 # 阿里云百炼baseurl
 BAILIAN_BASE_URL = "https://dashscope.aliyuncs.com/api/v1"
 
+# 创建全局MCP实例用于装饰器
+mcp = FastMCP(name="阿里云百炼生图API MCP服务器")
+
 
 def get_api_key_from_context(ctx: Context) -> str:
-    """从MCP请求上下文中获取API密钥"""
+    """从MCP请求上下文或环境变量中获取API密钥"""
 
-    headers: Headers = ctx.request_context.request.headers
-    # 如果没有找到认证头，抛出异常
-    if "Authorization" not in headers:
-        raise ValueError("未找到有效的API密钥，请在MCP客户端配置中设置Authorization头")
-    return headers["Authorization"][7:]  # 移除 "Bearer " 前缀
+    # 首先尝试从环境变量获取（适用于两种模式）
+    env_key = os.getenv("DASHSCOPE_API_KEY")
+    if env_key:
+        return env_key
+
+    # HTTP模式：尝试从请求头获取
+    if hasattr(ctx, "request_context") and ctx.request_context:
+        try:
+            headers: Headers = ctx.request_context.request.headers
+            if "Authorization" in headers:
+                return headers["Authorization"][7:]  # 移除 "Bearer " 前缀
+        except Exception:
+            pass
+
+    raise ValueError(
+        "未找到有效的API密钥。请设置 DASHSCOPE_API_KEY 环境变量，"
+        "或在HTTP模式下通过Authorization头提供API密钥"
+    )
 
 
 def get_http_client(api_key: str) -> httpx.Client:
@@ -177,13 +192,20 @@ def get_image_generation_result(
         return f"查询任务结果时发生未知错误: {str(e)}"
 
 
+# 支持两种模式的启动脚本
 def main():
-    """运行MCP服务器"""
-    print("启动 阿里云百炼生图API MCP 服务器...")
-    print("API Key 将从MCP客户端的Authorization头获取")
+    import sys
 
-    # 启动MCP服务器，使用streamable-http传输方式
-    mcp.run(transport="streamable-http")
+    if "--http" in sys.argv:
+        print("启动HTTP模式（团队服务模式）")
+        # 配置HTTP模式参数
+        mcp.host = "0.0.0.0"
+        mcp.port = 8000
+        mcp.streamable_http_path = "/mcp"
+        mcp.run(transport="streamable-http")
+    else:
+        print("启动stdio模式（个人使用模式）", file=sys.stderr)
+        mcp.run()  # 默认stdio
 
 
 if __name__ == "__main__":
