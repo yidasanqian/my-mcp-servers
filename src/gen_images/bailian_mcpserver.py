@@ -198,10 +198,6 @@ def main():
 
     if "--http" in sys.argv:
         print("启动HTTP模式（团队服务模式）")
-        # 配置HTTP模式参数
-        mcp.host = "0.0.0.0"
-        mcp.port = 8000
-        mcp.streamable_http_path = "/mcp"
         mcp.run(transport="streamable-http")
     else:
         print("启动stdio模式（个人使用模式）", file=sys.stderr)
