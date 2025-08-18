@@ -1,0 +1,12 @@
+services:
+  bailian-mcp:
+    build:
+      context: ../..
+      dockerfile: src/gen_images/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # 监听所有接口
+      - FASTMCP_HOST=0.0.0.0
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+    restart: unless-stopped
