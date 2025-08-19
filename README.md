@@ -51,7 +51,7 @@ docker-compose up -d
   "mcpServers": {
     "bailian-image-gen": {
       "type": "streamableHttp",
-      "baseUrl": "http://localhost:8000/mcp",
+      "url": "http://localhost:8000/mcp",
       "headers": {
         "Authorization": "Bearer ${DASHSCOPE_API_KEY}"
       }
