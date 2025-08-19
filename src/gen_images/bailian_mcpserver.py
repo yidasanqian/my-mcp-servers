@@ -68,8 +68,8 @@ def get_http_aclient(api_key: str) -> httpx.Client:
 
 @mcp.tool()
 def generate_image(
-    prompt: str,
     ctx: Context,
+    prompt: str,
     size: str = "1328*1328",
     n: int = 1,
     prompt_extend: bool = True,
@@ -81,7 +81,6 @@ def generate_image(
 
     Args:
         prompt: 正向提示词，用来描述生成图像中期望包含的元素和视觉特点
-        ctx: MCP上下文对象
         size: 输出图像的分辨率，格式为宽*高。：
             默认为1328*1328,可选的分辨率及其对应的图像宽高比例为:
             - "1664*928": approximately 16:9
@@ -153,14 +152,13 @@ def generate_image(
 
 @mcp.tool()
 def get_image_generation_result(
-    task_id: str, ctx: Context, max_retries: int = 30, retry_interval: int = 3
+    ctx: Context, task_id: str, max_retries: int = 30, retry_interval: int = 3
 ) -> str:
     """
     根据任务ID查询图像生成结果
 
     Args:
         task_id: 图像生成任务的ID
-        ctx: MCP上下文对象
         max_retries: 最大重试次数
         retry_interval: 重试间隔（秒）
 
