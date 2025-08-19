@@ -165,7 +165,7 @@ def get_image_generation_result(
         retry_interval: 重试间隔（秒）
 
     Returns:
-        图像生成结果的JSON格式字符串
+        results: 任务结果列表，包括图像URL、prompt、部分任务执行失败报错信息等
     """
     try:
         api_key = get_api_key_from_context(ctx)
@@ -235,6 +235,9 @@ def image_edit_generation(
     :param negative_prompt: 反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。支持中英文，长度不超过500个字符，超过部分会自动截断。
     示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
     :type negative_prompt: Optional[str]
+
+    Returns:
+        image_url: 生成的图像URL
     """
     try:
         api_key = get_api_key_from_context(ctx)
