@@ -49,6 +49,17 @@ def get_http_client(api_key: str) -> httpx.Client:
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+        },
+        timeout=30.0,
+    )
+
+
+def get_http_aclient(api_key: str) -> httpx.Client:
+    """获取HTTP客户端"""
+    return httpx.Client(
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
             "X-DashScope-Async": "enable",
         },
         timeout=30.0,
@@ -110,7 +121,7 @@ def generate_image(
         data["input"]["negative_prompt"] = negative_prompt
 
     try:
-        with get_http_client(api_key) as client:
+        with get_http_aclient(api_key) as client:
             response = client.post(
                 f"{BAILIAN_BASE_URL}/services/aigc/text2image/image-synthesis",
                 json=data,
@@ -190,6 +201,103 @@ def get_image_generation_result(
         return f"HTTP错误: {e.response.status_code} - {e.response.text}"
     except Exception as e:
         return f"查询任务结果时发生未知错误: {str(e)}"
+
+
+@mcp.tool()
+def image_edit_generation(
+    ctx: Context,
+    prompt: str,
+    image: str,
+    negative_prompt: Optional[str] = None,
+) -> str:
+    """
+    调用阿里云百炼编辑图片API生成图像
+
+    :param prompt: 正向提示词，用来描述生成图像中期望包含的元素和视觉特点。支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+    :type prompt: str
+    :param image: 输入图像的URL或 Base64 编码数据。
+    图像限制：
+        - 图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+        - 图像分辨率：图像的宽度和高度范围为[512, 4096]像素。
+        - 图像大小：不超过10MB。
+        - URL地址中不能包含中文字符。
+
+    输入图像说明：
+        - 使用公网可访问URL
+        - 支持 HTTP 或 HTTPS 协议。
+        - 示例值：https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg。
+
+    传入 Base64 编码图像后的字符串
+        - 数据格式：data:{MIME_type};base64,{base64_data}。
+        - 示例值：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ......。
+        - 示例中的编码字符串不完整，仅做演示
+    :type image: str
+    :param negative_prompt: 反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。支持中英文，长度不超过500个字符，超过部分会自动截断。
+    示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
+    :type negative_prompt: Optional[str]
+    """
+    try:
+        api_key = get_api_key_from_context(ctx)
+    except ValueError as e:
+        return f"认证错误: {str(e)}"
+
+    # 构建请求数据
+    data = {
+        "model": "qwen-image-edit",
+        "input": {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "image": image,
+                        },
+                        {"text": prompt},
+                    ],
+                }
+            ]
+        },
+        "parameters": {
+            "prompt_extend": True,
+            "watermark": False,
+        },
+    }
+
+    # 添加反向提示词（如果提供）
+    if negative_prompt:
+        data["parameters"]["negative_prompt"] = negative_prompt
+
+    try:
+        with get_http_client(api_key) as client:
+            print(f"请求数据: {json.dumps(data, ensure_ascii=False, indent=2)}")
+            response = client.post(
+                f"{BAILIAN_BASE_URL}/services/aigc/multimodal-generation/generation",
+                json=data,
+            )
+            response.raise_for_status()
+            result = response.json()
+
+            # 检查响应是否包含任务ID
+            if "output" in result and "choices" in result["output"]:
+                return json.dumps(
+                    {
+                        "image_url": result["output"]["choices"][0]["message"][
+                            "content"
+                        ][0]["image"],
+                        "request_id": result.get("request_id", ""),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            else:
+                return f"API响应错误: {result}"
+
+    except httpx.RequestError as e:
+        return f"请求错误: {str(e)}"
+    except httpx.HTTPStatusError as e:
+        return f"HTTP错误: {e.response.status_code} - {e.response.text}"
+    except Exception as e:
+        return f"编辑图像时发生未知错误: {str(e)}"
 
 
 # 支持两种模式的启动脚本
