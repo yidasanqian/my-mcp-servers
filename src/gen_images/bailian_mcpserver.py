@@ -215,7 +215,7 @@ def image_edit_generation(
 
     :param prompt: 正向提示词，用来描述生成图像中期望包含的元素和视觉特点。支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
     :type prompt: str
-    :param image: 输入图像的URL或 Base64 编码数据。
+    :param image: 输入图像的URL。
     图像限制：
         - 图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
         - 图像分辨率：图像的宽度和高度范围为[512, 4096]像素。
@@ -225,12 +225,7 @@ def image_edit_generation(
     输入图像说明：
         - 使用公网可访问URL
         - 支持 HTTP 或 HTTPS 协议。
-        - 示例值：https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg。
 
-    传入 Base64 编码图像后的字符串
-        - 数据格式：data:{MIME_type};base64,{base64_data}。
-        - 示例值：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ......。
-        - 示例中的编码字符串不完整，仅做演示
     :type image: str
     :param negative_prompt: 反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。支持中英文，长度不超过500个字符，超过部分会自动截断。
     示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
