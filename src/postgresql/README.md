@@ -53,9 +53,7 @@
 
 ### 为 VS Code 配置
 
-<a href="vscode:mcp/install?%7B%22name%22%3A%22postgresql%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22my-mcp-servers%22%2C%22postgresql-mcp-server%22%5D%2C%22env%22%3A%7B%22DB_HOST%22%3A%22localhost%22%2C%22DB_PORT%22%3A5432%2C%22DB_NAME%22%3A%22your_database_name%22%2C%22DB_USER%22%3A%22your_username%22%2C%22DB_PASSWORD%22%3A%22your_password%22%7D%7D">
-  <img src="https://img.shields.io/badge/Install%20in-VS%20Code-blue?style=for-the-badge&logo=visualstudiocode" alt="Install in VS Code" />
-</a>
+[<img alt="Install in VS Code" src="https://img.shields.io/badge/Install%20in-VS%20Code-0098FF?style=for-the-badge&logo=visualstudiocode&logoColor=white">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%7B%22name%22%3A%22postgresql%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22my-mcp-servers%22%2C%22postgresql-mcp-server%22%5D%2C%22env%22%3A%7B%22DB_HOST%22%3A%22localhost%22%2C%22DB_PORT%22%3A5432%2C%22DB_NAME%22%3A%22your_database_name%22%2C%22DB_USER%22%3A%22your_username%22%2C%22DB_PASSWORD%22%3A%22your_password%22%7D%7D)
 
 在工作区中创建 `.vscode/mcp.json` 文件：
 
