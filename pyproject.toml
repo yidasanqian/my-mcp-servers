@@ -1,6 +1,6 @@
 [project]
 name = "my-mcp-servers"
-version = "0.1.6"
+version = "0.1.7"
 description = "Model Context Protocol servers for PostgreSQL and Alibaba Cloud Bailian image generation"
 readme = "README.md"
 requires-python = ">=3.11"
