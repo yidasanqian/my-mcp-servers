@@ -113,7 +113,9 @@ python -m src.gen_images.bailian_mcpserver
 
 ### 为 VS Code 配置
 
-[![Install in VS Code](https://img.shields.io/badge/Install%20in-VS%20Code-blue?style=for-the-badge&logo=visualstudiocode)](vscode:mcp/install?%7B%22mcp%22%3A%7B%22servers%22%3A%7B%22bailian-image%22%3A%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22my-mcp-servers%22%2C%22bailian-mcp-server%22%5D%2C%22env%22%3A%7B%22DASHSCOPE_API_KEY%22%3A%22sk-your-api-key%22%7D%7D%7D%7D%7D)
+<a href="vscode:mcp/install?%7B%22name%22%3A%22bailian-image%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22my-mcp-servers%22%2C%22bailian-mcp-server%22%5D%2C%22env%22%3A%7B%22DASHSCOPE_API_KEY%22%3A%22sk-your-api-key%22%7D%7D">
+  <img src="https://img.shields.io/badge/Install%20in-VS%20Code-blue?style=for-the-badge&logo=visualstudiocode" alt="Install in VS Code" />
+</a>
 
 在工作区中创建 `.vscode/mcp.json` 文件：
 
